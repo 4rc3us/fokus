@@ -40,6 +40,14 @@ public partial class App : Application
             mediaService,
             startupService
         );
+
+        // On manual launch, show the flyout so the user immediately sees the interface
+        bool startMinimized = e.Args.Any(a => a.Equals("--minimized", StringComparison.OrdinalIgnoreCase) ||
+                                              a.Equals("--autostart", StringComparison.OrdinalIgnoreCase));
+        if (!startMinimized)
+        {
+            _trayManager.ShowFlyout(fromTrayClick: false);
+        }
     }
 
     protected override void OnExit(ExitEventArgs e)

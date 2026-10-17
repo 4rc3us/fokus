@@ -67,17 +67,21 @@ public partial class FlyoutWindow : Window
         MainDial.SkipClick += (_, _) => _timerEngine.Skip();
     }
 
-    public void ShowNearTray(Point trayPosition)
+    private DateTime _openedAt = DateTime.MinValue;
+
+    public void ShowNearTray(Point? trayPosition = null)
     {
         // Position window just above tray
         var workArea = SystemParameters.WorkArea;
+        double targetX = trayPosition.HasValue ? trayPosition.Value.X : (workArea.Right - (Width / 2.0) - 20);
 
-        double left = Math.Clamp(trayPosition.X - (Width / 2.0), 10, workArea.Right - Width - 10);
+        double left = Math.Clamp(targetX - (Width / 2.0), 10, workArea.Right - Width - 10);
         double top = workArea.Bottom - Height - 10;
 
         Left = left;
         Top = top;
 
+        _openedAt = DateTime.UtcNow;
         Show();
         Activate();
         Focus();
@@ -85,6 +89,10 @@ public partial class FlyoutWindow : Window
 
     private void Window_Deactivated(object sender, EventArgs e)
     {
+        // Don't close immediately if deactivated within 300ms of opening (prevents instant-close glitch on tray click)
+        if ((DateTime.UtcNow - _openedAt).TotalMilliseconds < 300)
+            return;
+
         Hide();
     }
 

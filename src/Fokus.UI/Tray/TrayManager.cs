@@ -58,11 +58,13 @@ public class TrayManager : IDisposable
         BuildContextMenu();
         SubscribeEvents();
         UpdateTrayVisuals();
+        _trayIcon.ForceCreate(enablesEfficiencyMode: false);
     }
 
     private void SubscribeEvents()
     {
-        _trayIcon.TrayLeftMouseDown += OnTrayLeftMouseDown;
+        _trayIcon.TrayLeftMouseDown += (_, _) => ShowFlyout(fromTrayClick: true);
+        _trayIcon.TrayMouseDoubleClick += (_, _) => ShowFlyout(fromTrayClick: true);
         _trayIcon.PreviewMouseWheel += OnTrayMouseWheel;
 
         _timerEngine.Tick += OnEngineTick;
@@ -136,7 +138,7 @@ public class TrayManager : IDisposable
 
         // Open window
         var openItem = new MenuItem { Header = "Abrir panel de Fokus" };
-        openItem.Click += (_, _) => ShowFlyout();
+        openItem.Click += (_, _) => ShowFlyout(fromTrayClick: false);
         menu.Items.Add(openItem);
 
         // Exit
@@ -157,12 +159,7 @@ public class TrayManager : IDisposable
         UpdateTrayVisuals();
     }
 
-    private void OnTrayLeftMouseDown(object sender, RoutedEventArgs e)
-    {
-        ShowFlyout();
-    }
-
-    private void ShowFlyout()
+    public void ShowFlyout(bool fromTrayClick = false)
     {
         if (_flyout == null || !_flyout.IsLoaded)
         {
@@ -175,13 +172,13 @@ public class TrayManager : IDisposable
             );
         }
 
-        if (_flyout.IsVisible)
+        if (_flyout.IsVisible && fromTrayClick)
         {
             _flyout.Hide();
         }
         else
         {
-            var mousePos = GetCursorScreenPosition();
+            Point? mousePos = fromTrayClick ? GetCursorScreenPosition() : null;
             _flyout.ShowNearTray(mousePos);
         }
     }

@@ -1,0 +1,78 @@
+name: Build and Release Fokus
+
+on:
+  push:
+    branches: [ main, master ]
+    tags:
+      - 'v*'
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+    inputs:
+      create_release:
+        description: 'Crear GitHub Release con el binario'
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build & Package (Windows x64)
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: |
+            10.0.x
+            8.0.x
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Run Unit Tests
+        run: dotnet test --configuration Release --no-restore --verbosity normal
+
+      - name: Publish Standalone Binary (win-x64)
+        run: |
+          dotnet publish src/Fokus.UI/Fokus.UI.csproj `
+            -c Release `
+            -r win-x64 `
+            --self-contained true `
+            -p:PublishSingleFile=true `
+            -p:IncludeNativeLibrariesForSelfExtract=true `
+            -p:EnableCompressionInSingleFile=true `
+            -o ./publish/win-x64
+
+      - name: Compress Binary to ZIP
+        shell: pwsh
+        run: |
+          Compress-Archive -Path ./publish/win-x64/* -DestinationPath ./publish/Fokus-Windows-x64.zip
+
+      - name: Upload Build Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Fokus-Windows-x64
+          path: ./publish/Fokus-Windows-x64.zip
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Create GitHub Release
+        if: startsWith(github.ref, 'refs/tags/v') || github.event.inputs.create_release == 'true'
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ./publish/Fokus-Windows-x64.zip
+          generate_release_notes: true
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

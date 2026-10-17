@@ -39,16 +39,16 @@ public partial class TimerDial : UserControl
         DependencyProperty.Register(nameof(TimeFontWeight), typeof(FontWeight), typeof(TimerDial), new PropertyMetadata(FontWeights.SemiBold));
 
     public static readonly DependencyProperty TimeFontFamilyProperty =
-        DependencyProperty.Register(nameof(TimeFontFamily), typeof(FontFamily), typeof(TimerDial), new PropertyMetadata(new FontFamily("Segoe UI")));
+        DependencyProperty.Register(nameof(TimeFontFamily), typeof(FontFamily), typeof(TimerDial), new PropertyMetadata(null));
 
     public static readonly DependencyProperty DialColorProperty =
         DependencyProperty.Register(nameof(DialColor), typeof(Color), typeof(TimerDial), new PropertyMetadata(Color.FromRgb(235, 75, 85)));
 
     public static readonly DependencyProperty DialBrushProperty =
-        DependencyProperty.Register(nameof(DialBrush), typeof(Brush), typeof(TimerDial), new PropertyMetadata(new SolidColorBrush(Color.FromRgb(235, 75, 85))));
+        DependencyProperty.Register(nameof(DialBrush), typeof(Brush), typeof(TimerDial), new PropertyMetadata(null));
 
     public static readonly DependencyProperty PlayPauseIconProperty =
-        DependencyProperty.Register(nameof(PlayPauseIcon), typeof(IconElement), typeof(TimerDial), new PropertyMetadata(new SymbolIcon(SymbolRegular.Play24)));
+        DependencyProperty.Register(nameof(PlayPauseIcon), typeof(IconElement), typeof(TimerDial), new PropertyMetadata(null));
 
     public static readonly DependencyProperty TaskVisibilityProperty =
         DependencyProperty.Register(nameof(TaskVisibility), typeof(Visibility), typeof(TimerDial), new PropertyMetadata(Visibility.Collapsed));
@@ -63,6 +63,9 @@ public partial class TimerDial : UserControl
     public TimerDial()
     {
         InitializeComponent();
+        TimeFontFamily = new FontFamily("Segoe UI");
+        PlayPauseIcon = new SymbolIcon(SymbolRegular.Play24);
+        UpdateColors();
         Loaded += (_, _) =>
         {
             UpdateArc();

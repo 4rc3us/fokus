@@ -58,7 +58,18 @@ public class TrayManager : IDisposable
         BuildContextMenu();
         SubscribeEvents();
         UpdateTrayVisuals();
-        _trayIcon.ForceCreate(enablesEfficiencyMode: false);
+
+        Application.Current.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Loaded, () =>
+        {
+            try
+            {
+                _trayIcon.ForceCreate(enablesEfficiencyMode: false);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Tray icon ForceCreate exception: {ex}");
+            }
+        });
     }
 
     private void SubscribeEvents()

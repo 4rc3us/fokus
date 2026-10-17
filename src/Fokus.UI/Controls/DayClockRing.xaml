@@ -1,0 +1,22 @@
+<UserControl x:Class="Fokus.UI.Controls.DayClockRing"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="260" d:DesignWidth="260">
+    <Grid Width="250" Height="250" HorizontalAlignment="Center" VerticalAlignment="Center">
+        <!-- Outer Track -->
+        <Ellipse Width="220" Height="220" Stroke="{DynamicResource ControlStrokeColorDefaultBrush}" StrokeThickness="14" Opacity="0.15"/>
+
+        <!-- Canvas for rendering arc blocks and hour ticks -->
+        <Canvas x:Name="ClockCanvas" Width="250" Height="250"/>
+
+        <!-- Center Summary -->
+        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+            <TextBlock Text="HOY" FontSize="11" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorSecondaryBrush}" HorizontalAlignment="Center"/>
+            <TextBlock x:Name="TxtTotalFocus" Text="0m" FontSize="26" FontWeight="Bold" Foreground="{DynamicResource TextFillColorPrimaryBrush}" HorizontalAlignment="Center"/>
+            <TextBlock x:Name="TxtSessionsCount" Text="0 sesiones" FontSize="11" Foreground="{DynamicResource TextFillColorTertiaryBrush}" HorizontalAlignment="Center"/>
+        </StackPanel>
+    </Grid>
+</UserControl>

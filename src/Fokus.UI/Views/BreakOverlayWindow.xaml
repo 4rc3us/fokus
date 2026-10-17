@@ -1,0 +1,57 @@
+<Window x:Class="Fokus.UI.Views.BreakOverlayWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+        xmlns:controls="clr-namespace:Fokus.UI.Controls"
+        mc:Ignorable="d"
+        Title="Descanso - Fokus"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Topmost="True"
+        ShowInTaskbar="False"
+        KeyDown="Window_KeyDown"
+        Focusable="True">
+    <Grid x:Name="RootGrid">
+        <!-- Backdrop Blur and Dimming Layer -->
+        <Border x:Name="BackdropBorder" Background="#000000" Opacity="0.75"/>
+
+        <!-- Center Content with Dial and Controls -->
+        <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
+            <StackPanel HorizontalAlignment="Center">
+                <!-- Large Central Dial -->
+                <controls:TimerDial x:Name="OverlayDial" Margin="0,0,0,30"/>
+
+                <!-- Action Buttons Container (Hover or always visible) -->
+                <Border x:Name="ButtonsBorder" 
+                        Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+                        CornerRadius="24" Padding="16,8"
+                        BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}" BorderThickness="1"
+                        HorizontalAlignment="Center">
+                    <StackPanel Orientation="Horizontal">
+                        <!-- Postpone Button -->
+                        <ui:Button x:Name="BtnPostpone" Icon="{ui:SymbolIcon ArrowClockwise24}"
+                                   Content="Posponer (+1m)" Appearance="Secondary"
+                                   Click="BtnPostpone_Click" Margin="0,0,12,0"/>
+
+                        <!-- Skip Button -->
+                        <ui:Button x:Name="BtnSkip" Icon="{ui:SymbolIcon Next24}"
+                                   Content="Saltar descanso" Appearance="Primary"
+                                   Click="BtnSkip_Click" Margin="0,0,12,0"/>
+
+                        <!-- Close Overlay Button -->
+                        <ui:Button x:Name="BtnClose" Icon="{ui:SymbolIcon Dismiss24}"
+                                   Content="Minimizar" Appearance="Secondary"
+                                   Click="BtnClose_Click" Margin="0,0,12,0"/>
+
+                        <!-- End Session Button -->
+                        <ui:Button x:Name="BtnEnd" Icon="{ui:SymbolIcon Stop24}"
+                                   Content="Finalizar hoy" Appearance="Danger"
+                                   Click="BtnEnd_Click"/>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>

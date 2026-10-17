@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Fokus.Core/Fokus.Core.csproj" />
+    <Project Path="src/Fokus.UI/Fokus.UI.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Fokus.Tests/Fokus.Tests.csproj" />
+  </Folder>
+</Solution>

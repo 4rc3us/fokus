@@ -15,16 +15,55 @@
         Topmost="True"
         ShowInTaskbar="False"
         ResizeMode="NoResize"
-        Deactivated="Window_Deactivated">
+        Deactivated="Window_Deactivated"
+        TextOptions.TextFormattingMode="Display"
+        TextOptions.TextRenderingMode="ClearType"
+        TextOptions.TextHintingMode="Fixed"
+        UseLayoutRounding="True"
+        SnapsToDevicePixels="True"
+        FontFamily="Segoe UI Variable Text, Segoe UI, sans-serif">
     <Window.Resources>
-        <!-- Drop Shadow Effect -->
-        <DropShadowEffect x:Key="FlyoutShadow" BlurRadius="28" ShadowDepth="4" Direction="270" Color="#000000" Opacity="0.45"/>
+        <!-- Subtle Windows 11 Flyout Shadow -->
+        <DropShadowEffect x:Key="FlyoutShadow" BlurRadius="36" ShadowDepth="8" Direction="270" Color="#000000" Opacity="0.55"/>
+
+        <!-- Segmented Control RadioButton Style -->
+        <Style x:Key="SegmentedRadioButtonStyle" TargetType="RadioButton">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#99FFFFFF"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="RadioButton">
+                        <Border x:Name="border" CornerRadius="12" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#25FFFFFF"/>
+                                <Setter Property="Foreground" Value="#FFFFFF"/>
+                                <Setter Property="FontWeight" Value="SemiBold"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Foreground" Value="#FFFFFF"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Window.Resources>
 
-    <!-- Main Container with Windows 11 Rounded Corners and Border -->
+    <!-- Main Container with Windows 11 Acrylic Backdrop & ClearType Enabled -->
     <Border Margin="14" CornerRadius="16" Effect="{StaticResource FlyoutShadow}"
-            Background="{DynamicResource ApplicationBackgroundBrush}"
-            BorderBrush="{DynamicResource SurfaceStrokeColorDefaultBrush}" BorderThickness="1">
+            Background="#F0202020"
+            BorderBrush="#2AFFFFFF" BorderThickness="1"
+            RenderOptions.ClearTypeHint="Enabled"
+            TextOptions.TextFormattingMode="Display"
+            TextOptions.TextRenderingMode="ClearType"
+            TextOptions.TextHintingMode="Fixed"
+            SnapsToDevicePixels="True"
+            UseLayoutRounding="True">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/> <!-- Header -->
@@ -33,7 +72,7 @@
             </Grid.RowDefinitions>
 
             <!-- Top Header -->
-            <Border Grid.Row="0" Padding="16,14,16,10" BorderBrush="{DynamicResource SurfaceStrokeColorDefaultBrush}" BorderThickness="0,0,0,1">
+            <Border Grid.Row="0" Padding="16,12,16,12" BorderBrush="#1FFFFFFF" BorderThickness="0,0,0,1">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
@@ -44,26 +83,28 @@
                     <!-- App Title / Icon -->
                     <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
                         <ui:SymbolIcon Symbol="Clock24" FontSize="18" Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}" Margin="0,0,8,0"/>
-                        <TextBlock Text="FOKUS" FontWeight="Bold" FontSize="15"
+                        <TextBlock Text="FOKUS" FontFamily="Segoe UI Variable Display, Segoe UI Variable Text, Segoe UI"
+                                   FontWeight="Bold" FontSize="14"
                                    Foreground="{DynamicResource TextFillColorPrimaryBrush}" VerticalAlignment="Center"/>
                     </StackPanel>
 
                     <!-- Mode Selector: Pomodoro / Flowmodoro -->
-                    <Border Grid.Column="1" HorizontalAlignment="Center" Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
-                            CornerRadius="8" Padding="4,2">
+                    <Border Grid.Column="1" HorizontalAlignment="Center" Background="#14FFFFFF"
+                            CornerRadius="14" Padding="3" BorderBrush="#18FFFFFF" BorderThickness="1">
                         <StackPanel Orientation="Horizontal">
                             <RadioButton x:Name="RbPomodoro" Content="Pomodoro" IsChecked="True"
                                          GroupName="ModeGroup" Checked="RbMode_Changed"
-                                         Style="{DynamicResource {x:Type ToggleButton}}" Padding="8,4" FontSize="11" Margin="0,0,4,0"/>
+                                         Style="{StaticResource SegmentedRadioButtonStyle}" Padding="10,4" FontSize="11" Margin="0,0,2,0"/>
                             <RadioButton x:Name="RbFlowmodoro" Content="Flowmodoro"
                                          GroupName="ModeGroup" Checked="RbMode_Changed"
-                                         Style="{DynamicResource {x:Type ToggleButton}}" Padding="8,4" FontSize="11"/>
+                                         Style="{StaticResource SegmentedRadioButtonStyle}" Padding="10,4" FontSize="11"/>
                         </StackPanel>
                     </Border>
 
                     <!-- Quick Close / Pin -->
                     <ui:Button Grid.Column="2" Icon="{ui:SymbolIcon Dismiss16}" Appearance="Transparent"
-                               Width="28" Height="28" Padding="0" Click="BtnClose_Click"/>
+                               Width="30" Height="30" CornerRadius="15" Padding="0" Click="BtnClose_Click"
+                               ToolTip="Ocultar a la bandeja"/>
                 </Grid>
             </Border>
 
@@ -74,19 +115,19 @@
                     <ScrollViewer VerticalScrollBarVisibility="Auto">
                         <StackPanel VerticalAlignment="Center" Margin="16,10,16,10">
                             <!-- Presets Pills Row (visible in Pomodoro) -->
-                            <StackPanel x:Name="PresetsRow" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,10">
-                                <ui:Button x:Name="BtnPreset1" Content="25 / 5" Appearance="Secondary" FontSize="11" Padding="8,3" Click="BtnPreset_Click" Margin="0,0,6,0"/>
-                                <ui:Button x:Name="BtnPreset2" Content="50 / 10" Appearance="Secondary" FontSize="11" Padding="8,3" Click="BtnPreset_Click" Margin="0,0,6,0"/>
-                                <ui:Button x:Name="BtnPreset3" Content="90 / 20" Appearance="Secondary" FontSize="11" Padding="8,3" Click="BtnPreset_Click"/>
+                            <StackPanel x:Name="PresetsRow" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,12">
+                                <ui:Button x:Name="BtnPreset1" Content="25 / 5" Appearance="Secondary" FontSize="11" FontWeight="Medium" CornerRadius="12" Padding="12,4" Click="BtnPreset_Click" Margin="0,0,8,0"/>
+                                <ui:Button x:Name="BtnPreset2" Content="50 / 10" Appearance="Secondary" FontSize="11" FontWeight="Medium" CornerRadius="12" Padding="12,4" Click="BtnPreset_Click" Margin="0,0,8,0"/>
+                                <ui:Button x:Name="BtnPreset3" Content="90 / 20" Appearance="Secondary" FontSize="11" FontWeight="Medium" CornerRadius="12" Padding="12,4" Click="BtnPreset_Click"/>
                             </StackPanel>
 
                             <!-- Central Dial -->
                             <controls:TimerDial x:Name="MainDial"/>
 
                             <!-- Active Task Selector Chip -->
-                            <Border Background="{DynamicResource CardBackgroundFillColorSecondaryBrush}"
-                                    CornerRadius="10" Padding="12,8" Margin="0,14,0,0"
-                                    BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}" BorderThickness="1">
+                            <Border Background="#12FFFFFF"
+                                    CornerRadius="12" Padding="12,9" Margin="0,14,0,0"
+                                    BorderBrush="#1AFFFFFF" BorderThickness="1">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto"/>
@@ -95,14 +136,15 @@
                                     </Grid.ColumnDefinitions>
 
                                     <ui:SymbolIcon Grid.Column="0" Symbol="TasklistSquareLtr20" FontSize="16" Margin="0,0,8,0"
-                                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
+                                                   Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"/>
 
                                     <TextBlock Grid.Column="1" x:Name="TxtActiveTaskBar" Text="Sin tarea asignada"
                                                FontSize="12" FontWeight="Medium" Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                                                VerticalAlignment="Center" TextTrimming="CharacterEllipsis"/>
 
                                     <ui:Button Grid.Column="2" Content="Cambiar" Appearance="Transparent"
-                                               FontSize="11" Padding="6,2" Click="BtnSwitchToTasks_Click"/>
+                                               Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"
+                                               FontSize="11" FontWeight="SemiBold" Padding="8,2" Click="BtnSwitchToTasks_Click"/>
                                 </Grid>
                             </Border>
                         </StackPanel>
@@ -288,16 +330,32 @@
             </Grid>
 
             <!-- Bottom Navigation Bar -->
-            <Border Grid.Row="2" Padding="12,8" BorderBrush="{DynamicResource SurfaceStrokeColorDefaultBrush}" BorderThickness="0,1,0,0">
+            <Border Grid.Row="2" Padding="10,6" BorderBrush="#1FFFFFFF" BorderThickness="0,1,0,0">
                 <UniformGrid Columns="4">
-                    <ui:Button x:Name="NavBtnTimer" Icon="{ui:SymbolIcon Clock24}" Content="Tiempo"
-                               Appearance="Secondary" Click="NavBtn_Click" Margin="2" Padding="0,6"/>
-                    <ui:Button x:Name="NavBtnTasks" Icon="{ui:SymbolIcon TasklistSquareLtr24}" Content="Tareas"
-                               Appearance="Transparent" Click="NavBtn_Click" Margin="2" Padding="0,6"/>
-                    <ui:Button x:Name="NavBtnStats" Icon="{ui:SymbolIcon DataBarVertical24}" Content="Métricas"
-                               Appearance="Transparent" Click="NavBtn_Click" Margin="2" Padding="0,6"/>
-                    <ui:Button x:Name="NavBtnSettings" Icon="{ui:SymbolIcon Settings24}" Content="Ajustes"
-                               Appearance="Transparent" Click="NavBtn_Click" Margin="2" Padding="0,6"/>
+                    <ui:Button x:Name="NavBtnTimer" Appearance="Secondary" Click="NavBtn_Click" Margin="2" Padding="2,6" CornerRadius="8" HorizontalAlignment="Stretch">
+                        <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+                            <ui:SymbolIcon Symbol="Clock24" FontSize="18" HorizontalAlignment="Center"/>
+                            <TextBlock Text="Tiempo" FontSize="10" FontWeight="Medium" Margin="0,3,0,0" HorizontalAlignment="Center"/>
+                        </StackPanel>
+                    </ui:Button>
+                    <ui:Button x:Name="NavBtnTasks" Appearance="Transparent" Click="NavBtn_Click" Margin="2" Padding="2,6" CornerRadius="8" HorizontalAlignment="Stretch">
+                        <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+                            <ui:SymbolIcon Symbol="TasklistSquareLtr24" FontSize="18" HorizontalAlignment="Center"/>
+                            <TextBlock Text="Tareas" FontSize="10" FontWeight="Medium" Margin="0,3,0,0" HorizontalAlignment="Center"/>
+                        </StackPanel>
+                    </ui:Button>
+                    <ui:Button x:Name="NavBtnStats" Appearance="Transparent" Click="NavBtn_Click" Margin="2" Padding="2,6" CornerRadius="8" HorizontalAlignment="Stretch">
+                        <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+                            <ui:SymbolIcon Symbol="DataBarVertical24" FontSize="18" HorizontalAlignment="Center"/>
+                            <TextBlock Text="Métricas" FontSize="10" FontWeight="Medium" Margin="0,3,0,0" HorizontalAlignment="Center"/>
+                        </StackPanel>
+                    </ui:Button>
+                    <ui:Button x:Name="NavBtnSettings" Appearance="Transparent" Click="NavBtn_Click" Margin="2" Padding="4,6" CornerRadius="8" HorizontalAlignment="Stretch">
+                        <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+                            <ui:SymbolIcon Symbol="Settings24" FontSize="18" HorizontalAlignment="Center"/>
+                            <TextBlock Text="Ajustes" FontSize="10" FontWeight="Medium" Margin="0,3,0,0" HorizontalAlignment="Center"/>
+                        </StackPanel>
+                    </ui:Button>
                 </UniformGrid>
             </Border>
         </Grid>

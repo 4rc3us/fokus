@@ -12,8 +12,18 @@
         Topmost="True"
         ShowInTaskbar="False"
         KeyDown="Window_KeyDown"
-        Focusable="True">
-    <Grid x:Name="RootGrid">
+        Focusable="True"
+        TextOptions.TextFormattingMode="Display"
+        TextOptions.TextRenderingMode="ClearType"
+        TextOptions.TextHintingMode="Fixed"
+        RenderOptions.ClearTypeHint="Enabled"
+        UseLayoutRounding="True"
+        SnapsToDevicePixels="True"
+        FontFamily="Segoe UI Variable Text, Segoe UI, sans-serif">
+    <Grid x:Name="RootGrid"
+          TextOptions.TextFormattingMode="Display"
+          TextOptions.TextRenderingMode="ClearType"
+          RenderOptions.ClearTypeHint="Enabled">
         <!-- Backdrop Blur and Dimming Layer -->
         <Border x:Name="BackdropBorder" Background="#000000" Opacity="0.75"/>
 

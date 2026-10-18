@@ -5,20 +5,30 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
              mc:Ignorable="d" 
-             d:DesignHeight="340" d:DesignWidth="340">
-    <Grid Width="320" Height="320">
+             d:DesignHeight="340" d:DesignWidth="340"
+             TextOptions.TextFormattingMode="Display"
+             TextOptions.TextRenderingMode="ClearType"
+             TextOptions.TextHintingMode="Fixed"
+             RenderOptions.ClearTypeHint="Enabled"
+             UseLayoutRounding="True"
+             SnapsToDevicePixels="True"
+             FontFamily="Segoe UI Variable Text, Segoe UI, sans-serif">
+    <Grid Width="320" Height="320"
+          TextOptions.TextFormattingMode="Display"
+          TextOptions.TextRenderingMode="ClearType"
+          RenderOptions.ClearTypeHint="Enabled">
         <!-- Background Glow -->
-        <Ellipse Width="270" Height="270" Opacity="0.08">
+        <Ellipse Width="270" Height="270" Opacity="0.10">
             <Ellipse.Fill>
                 <RadialGradientBrush>
                     <GradientStop Color="{Binding DialColor, RelativeSource={RelativeSource AncestorType=UserControl}}" Offset="0"/>
-                    <GradientStop Color="Transparent" Offset="1"/>
+                    <GradientStop Color="Transparent" Offset="0.85"/>
                 </RadialGradientBrush>
             </Ellipse.Fill>
         </Ellipse>
 
         <!-- Dial Track -->
-        <Ellipse Width="260" Height="260" Stroke="{DynamicResource ControlStrokeColorDefaultBrush}" StrokeThickness="8" Opacity="0.25"/>
+        <Ellipse Width="260" Height="260" Stroke="#1FFFFFFF" StrokeThickness="8"/>
 
         <!-- Progress Arc -->
         <Path x:Name="ProgressPath" Stroke="{Binding DialBrush, RelativeSource={RelativeSource AncestorType=UserControl}}" 
@@ -27,10 +37,10 @@
         <!-- Center Content -->
         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
             <!-- Active Task Chip -->
-            <Border Background="{DynamicResource CardBackgroundFillColorDefaultBrush}" 
-                    CornerRadius="12" Padding="10,3" Margin="0,0,0,8"
+            <Border Background="#1AFFFFFF"
+                    CornerRadius="12" Padding="12,4" Margin="0,0,0,8"
                     Visibility="{Binding TaskVisibility, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                    HorizontalAlignment="Center" BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}" BorderThickness="1">
+                    HorizontalAlignment="Center" BorderBrush="#20FFFFFF" BorderThickness="1">
                 <TextBlock Text="{Binding TaskName, RelativeSource={RelativeSource AncestorType=UserControl}}"
                            FontSize="12" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                            TextTrimming="CharacterEllipsis" MaxWidth="180"/>
@@ -38,35 +48,39 @@
 
             <!-- Status Label -->
             <TextBlock Text="{Binding StatusText, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                       FontSize="13" FontWeight="Medium" Foreground="{Binding DialBrush, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                       FontSize="13" FontWeight="SemiBold"
+                       FontFamily="Segoe UI Variable Text, Segoe UI"
+                       Foreground="{Binding DialBrush, RelativeSource={RelativeSource AncestorType=UserControl}}"
                        HorizontalAlignment="Center" TextAlignment="Center"/>
 
             <!-- Countdown Text -->
             <TextBlock Text="{Binding TimeText, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                       FontSize="44" FontWeight="{Binding TimeFontWeight, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                       FontSize="48" FontWeight="SemiBold"
                        FontFamily="{Binding TimeFontFamily, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                       Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                       HorizontalAlignment="Center" Margin="0,2,0,4"/>
+                       TextOptions.TextFormattingMode="Display"
+                       TextOptions.TextRenderingMode="ClearType"
+                       Foreground="#FFFFFF"
+                       HorizontalAlignment="Center" Margin="0,2,0,6"/>
 
             <!-- Session Dots -->
-            <StackPanel x:Name="SessionDotsPanel" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,2,0,10"
+            <StackPanel x:Name="SessionDotsPanel" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,12"
                         Visibility="{Binding DotsVisibility, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
 
             <!-- Control Buttons -->
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                 <!-- Stop / Reset Button -->
-                <ui:Button x:Name="BtnStop" Icon="{ui:SymbolIcon Stop24}"
-                           Appearance="Secondary" Width="38" Height="38" CornerRadius="19"
-                           ToolTip="Detener y reiniciar" Click="BtnStop_Click" Margin="0,0,10,0"/>
+                <ui:Button x:Name="BtnStop" Icon="{ui:SymbolIcon Stop20}"
+                           Appearance="Secondary" Width="40" Height="40" CornerRadius="20"
+                           ToolTip="Detener y reiniciar" Click="BtnStop_Click" Margin="0,0,12,0"/>
 
                 <!-- Play / Pause Primary Button -->
                 <ui:Button x:Name="BtnPlayPause" Icon="{Binding PlayPauseIcon, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                           Appearance="Primary" Width="52" Height="52" CornerRadius="26"
-                           ToolTip="Iniciar / Pausar" Click="BtnPlayPause_Click" Margin="0,0,10,0"/>
+                           Appearance="Primary" Width="54" Height="54" CornerRadius="27"
+                           ToolTip="Iniciar / Pausar" Click="BtnPlayPause_Click" Margin="0,0,12,0"/>
 
                 <!-- Skip Button -->
-                <ui:Button x:Name="BtnSkip" Icon="{ui:SymbolIcon Next24}"
-                           Appearance="Secondary" Width="38" Height="38" CornerRadius="19"
+                <ui:Button x:Name="BtnSkip" Icon="{ui:SymbolIcon Next20}"
+                           Appearance="Secondary" Width="40" Height="40" CornerRadius="20"
                            ToolTip="Saltar a la siguiente sesión" Click="BtnSkip_Click"/>
             </StackPanel>
         </StackPanel>

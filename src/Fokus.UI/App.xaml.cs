@@ -2,6 +2,7 @@ using System.Windows;
 using Fokus.Core.Services;
 using Fokus.UI.Tray;
 using Wpf.Ui.Appearance;
+using Wpf.Ui.Controls;
 
 namespace Fokus.UI;
 
@@ -14,8 +15,12 @@ public partial class App : Application
     {
         base.OnStartup(e);
 
-        // Apply Windows 11 Dark Fluent Theme
-        ApplicationThemeManager.Apply(ApplicationTheme.Dark);
+        // Apply Windows 11 Dark Fluent Theme with system accent synchronization
+        ApplicationThemeManager.Apply(
+            ApplicationTheme.Dark,
+            WindowBackdropType.Mica,
+            updateAccent: true
+        );
 
         // Dependency composition
         var storageService = new StorageService();

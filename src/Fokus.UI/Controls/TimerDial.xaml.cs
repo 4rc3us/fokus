@@ -33,7 +33,11 @@ public partial class TimerDial : UserControl
         DependencyProperty.Register(nameof(SessionIndex), typeof(int), typeof(TimerDial), new PropertyMetadata(0, OnSessionsChanged));
 
     public static readonly DependencyProperty IsFlowmodoroProperty =
-        DependencyProperty.Register(nameof(IsFlowmodoro), typeof(bool), typeof(TimerDial), new PropertyMetadata(false, OnSessionsChanged));
+        DependencyProperty.Register(nameof(IsFlowmodoro), typeof(bool), typeof(TimerDial), new PropertyMetadata(false, (d, e) => {
+            var dial = (TimerDial)d;
+            dial.UpdateDots();
+            dial.UpdateColors();
+        }));
 
     public static readonly DependencyProperty TimeFontWeightProperty =
         DependencyProperty.Register(nameof(TimeFontWeight), typeof(FontWeight), typeof(TimerDial), new PropertyMetadata(FontWeights.SemiBold));
@@ -42,7 +46,7 @@ public partial class TimerDial : UserControl
         DependencyProperty.Register(nameof(TimeFontFamily), typeof(FontFamily), typeof(TimerDial), new PropertyMetadata(null));
 
     public static readonly DependencyProperty DialColorProperty =
-        DependencyProperty.Register(nameof(DialColor), typeof(Color), typeof(TimerDial), new PropertyMetadata(Color.FromRgb(235, 75, 85)));
+        DependencyProperty.Register(nameof(DialColor), typeof(Color), typeof(TimerDial), new PropertyMetadata(Color.FromRgb(255, 92, 108)));
 
     public static readonly DependencyProperty DialBrushProperty =
         DependencyProperty.Register(nameof(DialBrush), typeof(Brush), typeof(TimerDial), new PropertyMetadata(null));
@@ -63,7 +67,7 @@ public partial class TimerDial : UserControl
     public TimerDial()
     {
         InitializeComponent();
-        TimeFontFamily = new FontFamily("Segoe UI");
+        TimeFontFamily = new FontFamily("Segoe UI Variable Display, Segoe UI Variable Text, Segoe UI");
         PlayPauseIcon = new SymbolIcon(SymbolRegular.Play24);
         UpdateColors();
         Loaded += (_, _) =>
@@ -107,7 +111,10 @@ public partial class TimerDial : UserControl
 
     private void UpdateColors()
     {
-        Color color = IsBreak ? Color.FromRgb(46, 179, 143) : Color.FromRgb(235, 75, 85);
+        Color color = IsBreak
+            ? Color.FromRgb(45, 212, 191)    // Mint Teal (#2DD4BF)
+            : (IsFlowmodoro ? Color.FromRgb(56, 189, 248) : Color.FromRgb(255, 92, 108)); // Sky Cyan (#38BDF8) or Coral Rose (#FF5C6C)
+
         DialColor = color;
         DialBrush = new SolidColorBrush(color);
         UpdateDots();

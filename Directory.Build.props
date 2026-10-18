@@ -1,6 +1,0 @@
-<Project>
-  <PropertyGroup>
-    <!-- Suppress CS1668 (stale LIB env var directories from uninstalled build tools) and NU1510 (System.Drawing.Common pruning warning) -->
-    <NoWarn>$(NoWarn);CS1668;NU1510</NoWarn>
-  </PropertyGroup>
-</Project>
